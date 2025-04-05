@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/store';
 import { fetchProducts } from './features/productSlice';
 import { Product } from './types';
+import Image from 'next/image';
+
 
 // YouTube embed component
 const VideoEmbed = ({ url }: { url: string }) => {
@@ -82,60 +84,74 @@ export default function ProductsPage() {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Products ({pagination?.count || 0})</h1>
-  
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {
-        items.map((product: Product) => (
-          <li key={product.id} className="border p-4 rounded-lg shadow-sm">
-            <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
-            {/* <div 
-              className="text-gray-600 mb-4"
-              dangerouslySetInnerHTML={{ __html: product.description }}
-            /> */}
-            <div className="space-y-2">
-              {product.videoLink && (
+      
+      <div className="relative h-[600px] mb-8">
+          <Image
+            src="/images/background.webp"
+            alt="Background"
+            fill
+            className="object-cover"
+            quality={75}
+            priority
+          /> 
+      </div>
 
-                <VideoEmbed url={ product.videoLink } />
-                // <a
-                //   href={product.videoLink}
-                //   target="_blank"
-                //   rel="noopener noreferrer"
-                //   className="text-blue-600 block"
-                // >
-                //   Watch Video
-                // </a>
-              )}
-              {product.affiliateLink && (
-                <a
-                  href={product.affiliateLink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-green-600 block"
-                >
-                  Mua Ngay (Buy Now)
-                </a>
-              )}
-            </div>
-          </li>
-        ))}
-      </ul>
+      <div className="container mx-auto p-4">
+        <h1 className="text-2xl font-bold mb-4">Products ({pagination?.count || 0})</h1>
+    
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {
+          items.map((product: Product, index: number) => (
+            <li key={ index } className="border p-4 rounded-lg shadow-sm">
+              <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
+              {/* <div 
+                className="text-gray-600 mb-4"
+                dangerouslySetInnerHTML={{ __html: product.description }}
+              /> */}
+              <div className="space-y-2">
+                {product.videoLink && (
 
-      {status === 'loading' && (
-        <div className="flex justify-center my-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"> </div>
-        </div>
-      )}
+                  <VideoEmbed url={ product.videoLink } />
+                  // <a
+                  //   href={product.videoLink}
+                  //   target="_blank"
+                  //   rel="noopener noreferrer"
+                  //   className="text-blue-600 block"
+                  // >
+                  //   Watch Video
+                  // </a>
+                )}
+                {product.affiliateLink && (
+                  <a
+                    href={product.affiliateLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-white bg-red-500 p-2 rounded-md"
+                  >
+                    Mua Ngay (Buy Now)
+                  </a>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
 
-      {status === 'failed' && (
-        <div className="text-red-500 text-center my-4">Error: {error}</div>
-      )}
+        {status === 'loading' && (
+          <div className="flex justify-center my-8">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"> </div>
+          </div>
+        )}
 
-      {pagination?.totalPage === page && items.length > 0 && (
-        <div className="text-center text-gray-500 mt-8">          
-          Đã hiển thị sản phẩm cuối cùng!
-        </div>
-      )}
+        {status === 'failed' && (
+          <div className="text-red-500 text-center my-4">Error: {error}</div>
+        )}
+
+        {pagination?.totalPage === page && items.length > 0 && (
+          <div className="text-center text-gray-500 mt-8">          
+            Đã hiển thị sản phẩm cuối cùng!
+          </div>
+        )}
+      </div>
     </div>
   );
 }
