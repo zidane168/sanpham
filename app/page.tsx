@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '@/app/store';
 import { fetchProducts } from './features/productSlice';
 import { Product } from './types';
 
+// YouTube embed component
 const VideoEmbed = ({ url }: { url: string }) => {
   const getVideoId = (link: string) => {
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -37,29 +38,55 @@ export default function ProductsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { items, status, error, pagination } = useSelector((state: RootState) => state.products);
   const [page, setPage] = useState(1);
+  const loaderRef = useRef<HTMLDivElement>(null);
+  const initialLoadDone = useRef(false);
 
-  // Load more handler
-  const handleLoadMore = () => {
-    const nextPage = page + 1;
-    setPage(nextPage);
-    dispatch(fetchProducts(nextPage));
-  };
+  // Modified fetch function with limit
+  const loadProducts = useCallback( (pageNumber: number, limit: number = 3) => {
+       
+    dispatch(fetchProducts({ page: pageNumber, limit })); 
+      
+    },
+    [dispatch]
+  );
 
-  // Initial load
+  // Initial load for first 3 items
   useEffect(() => {
-    dispatch(fetchProducts(page));
-  }, [dispatch, page]);
+    if (!initialLoadDone.current) {
+      loadProducts(1, 3);
+      initialLoadDone.current = true;
+    }
+  }, [loadProducts]);
 
-  // Fix the product mapping
+  // Scroll handler
+  const handleScroll = useCallback(() => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop >=
+      document.documentElement.offsetHeight - 100 &&
+      status !== 'loading' &&
+      pagination?.totalPage &&
+      page < pagination.totalPage
+    ) {
+      console.log( 'load tiep 3 san pham nè ')
+      const nextPage = page + 1;
+      setPage(nextPage);
+      loadProducts(nextPage, 3); // Load 3 more items
+    }
+  }, [page, status, pagination, loadProducts]);
+
+  // Scroll event listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [handleScroll]);
+
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Products ({pagination?.count || 0})</h1>
-      
-      {status === 'loading' && <p>Loading...</p>}
-      {status === 'failed' && <div>Error: {error}</div>}
-
+  
       <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {items.map((product: Product) => (
+        {
+        items.map((product: Product) => (
           <li key={product.id} className="border p-4 rounded-lg shadow-sm">
             <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
             {/* <div 
@@ -94,14 +121,21 @@ export default function ProductsPage() {
         ))}
       </ul>
 
-      {(pagination?.totalPage || 0) > page && (
-        <button
-          onClick={handleLoadMore}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          disabled={status === 'loading'}
-        >
-          {status === 'loading' ? 'Loading...' : 'Load More'}
-        </button>
+
+      {status === 'loading' && (
+        <div className="flex justify-center my-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+        </div>
+      )}
+
+      {status === 'failed' && (
+        <div className="text-red-500 text-center my-4">Error: {error}</div>
+      )}
+
+      {pagination?.totalPage === page && items.length > 0 && (
+        <div className="text-center text-gray-500 mt-8">          
+          Đã hiển thị sản phẩm cuối cùng!
+        </div>
       )}
     </div>
   );

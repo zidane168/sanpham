@@ -36,10 +36,13 @@ const initialState: ProductsState = {
 
  
 
-export const fetchProducts = createAsyncThunk<ProductsResponse, void>(
+export const fetchProducts = createAsyncThunk<ProductsResponse, { page: number, limit: number }>(
   'products/fetchProducts',
-  async (page = 1) => {
-    const response = await fetch(`http://localhost:3000/products?page=${page}&limit=10`);
+  async ( arg ) => {
+    const { page, limit } = arg; 
+
+    const response = await fetch(`http://localhost:3000/products?page=${page}&limit=${limit}`);
+    
     console.log ('------------------------ ')
     console.log (response)
     console.log ('------------------------ ')
