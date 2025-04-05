@@ -64,8 +64,16 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action: PayloadAction<ProductsResponse>) => {
         state.status = 'succeeded';
-        state.items = action.payload.data;
-        state.pagination = action.payload._pagination;
+        state.items = [ ...state.items,  ...action.payload.data ];
+
+        // replace data when recall the fetchs, (no load more )
+        // state.items = action.payload.data; 
+        // state.pagination = action.payload._pagination;
+
+        state.pagination = {
+          count: state.items.length,
+          totalPage: action.payload._pagination.totalPage
+        }
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';

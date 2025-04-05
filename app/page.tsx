@@ -38,7 +38,7 @@ export default function ProductsPage() {
   const dispatch = useDispatch<AppDispatch>();
   const { items, status, error, pagination } = useSelector((state: RootState) => state.products);
   const [page, setPage] = useState(1);
-  const loaderRef = useRef<HTMLDivElement>(null);
+  
   const initialLoadDone = useRef(false);
 
   // Modified fetch function with limit
@@ -53,7 +53,7 @@ export default function ProductsPage() {
   // Initial load for first 3 items
   useEffect(() => {
     if (!initialLoadDone.current) {
-      loadProducts(1, 3);
+      loadProducts(1, 9);
       initialLoadDone.current = true;
     }
   }, [loadProducts]);
@@ -67,7 +67,7 @@ export default function ProductsPage() {
       pagination?.totalPage &&
       page < pagination.totalPage
     ) {
-      console.log( 'load tiep 3 san pham nè ')
+      // console.log( 'load tiep 3 san pham nè ')
       const nextPage = page + 1;
       setPage(nextPage);
       loadProducts(nextPage, 3); // Load 3 more items
@@ -121,10 +121,9 @@ export default function ProductsPage() {
         ))}
       </ul>
 
-
       {status === 'loading' && (
         <div className="flex justify-center my-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-600"> </div>
         </div>
       )}
 
