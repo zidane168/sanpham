@@ -34,12 +34,17 @@ const initialState: ProductsState = {
   error: null,
 };
 
+ 
+
 export const fetchProducts = createAsyncThunk<ProductsResponse, void>(
   'products/fetchProducts',
-  async () => {
-    const response = await fetch('http://localhost:3000/products?page=1&limit=100');
+  async (page = 1) => {
+    const response = await fetch(`http://localhost:3000/products?page=${page}&limit=10`);
+    console.log ('------------------------ ')
+    console.log (response)
+    console.log ('------------------------ ')
     if (!response.ok) {
-      throw new Error('Failed to fetch products');
+      throw new Error('Failed to fetch products xD');
     }
     return await response.json() as ProductsResponse;
   }
@@ -61,7 +66,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.status = 'failed';
-        state.error = action.error.message || 'Failed to fetch products';
+        state.error = action.error.message || 'Failed to fetch xx products';
       });
   },
 });

@@ -1,18 +1,18 @@
 export interface Product {
-    id: number;
-    categoryId: number;
-    videoLink?: string;
-    affiliateLink?: string;
-    title: string;
-    description: string;
-  }
-  
-  export interface Pagination {
-    count: number;
-    totalPage: number;
-  }
-  
-  export interface ProductsResponse {
-    _pagination: Pagination;
-    data: Product[];
-  }
+  id: number;
+  categoryId: number;
+  videoLink?: string;
+  affiliateLink?: string;
+  title: string;
+  description: string;
+}
+
+export interface Pagination {
+  count: number;
+  totalPage: number;
+}
+
+export interface ProductsResponse {
+  _pagination: Pagination;
+  data: Product[];
+}
