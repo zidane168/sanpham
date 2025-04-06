@@ -3,6 +3,7 @@ export interface Product {
   categoryId: number;
   videoLink?: string;
   affiliateLink?: string;
+  voucherLink?: string;
   title: string;
   description: string;
 }

@@ -83,7 +83,7 @@ export default function ProductsPage() {
   }, [handleScroll]);
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 shadow-lg">
       
       <div className="relative h-[600px] mb-8">
           <Image
@@ -97,18 +97,18 @@ export default function ProductsPage() {
       </div>
 
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Products ({pagination?.count || 0})</h1>
+        <h1 className="text-2xl font-bold mb-4">Sản phẩm ({pagination?.count || 0})</h1>
     
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
           {
           items.map((product: Product, index: number) => (
-            <li key={ index } className="border p-4 rounded-lg shadow-sm">
+            <li key={ index } className="border p-4 rounded-lg shadow-lg">
               <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
               {/* <div 
                 className="text-gray-600 mb-4"
                 dangerouslySetInnerHTML={{ __html: product.description }}
               /> */}
-              <div className="space-y-2">
+              <div className="space-y-2 space-x-2">
                 {product.videoLink && (
 
                   <VideoEmbed url={ product.videoLink } />
@@ -122,14 +122,69 @@ export default function ProductsPage() {
                   // </a>
                 )}
                 {product.affiliateLink && (
-                  <a
-                    href={product.affiliateLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-white bg-red-500 p-2 rounded-md"
+                 <a
+                  href={product.affiliateLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white uppercase transition-all duration-300 transform bg-gradient-to-r from-amber-500 to-red-500 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl hover:shadow-amber-100 hover:bg-gradient-to-br group"
+                >
+                  {/* Animated border */}
+                  <span className="absolute inset-0 rounded-xl -z-10 bg-gradient-to-r from-amber-500 to-red-500 blur-sm group-hover:blur-md group-hover:opacity-75 transition-all duration-300"></span>
+                  
+                  {/* Button content */}
+                  <span className="relative tracking-wider">
+                    MUA NGAY - Limited Offer
+                  </span>
+                  
+                  {/* Animated arrow icon */}
+                  <svg
+                    className="relative w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    Mua Ngay (Buy Now)
-                  </a>
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M17 8l4 4m0 0l-4 4m4-4H3"
+                    ></path>
+                  </svg>
+                </a>
+                )} 
+
+              {product.voucherLink && (
+                   <a
+                   href={product.voucherLink}
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white uppercase transition-all duration-300 transform bg-gradient-to-r from-amber-500 to-red-500 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl hover:shadow-amber-100 hover:bg-gradient-to-br group"
+                 >
+                   {/* Animated border */}
+                   <span className="absolute inset-0 rounded-xl -z-10 bg-gradient-to-r from-amber-500 to-red-500 blur-sm group-hover:blur-md group-hover:opacity-75 transition-all duration-300"></span>
+                   
+                   {/* Button content */}
+                   <span className="relative tracking-wider">
+                     Lấy Voucher - Get Free Voucher
+                   </span>
+                   
+                   {/* Animated arrow icon */}
+                   <svg
+                     className="relative w-5 h-5 ml-2 transition-transform duration-300 group-hover:translate-x-1"
+                     fill="none"
+                     stroke="currentColor"
+                     viewBox="0 0 24 24"
+                     xmlns="http://www.w3.org/2000/svg"
+                   >
+                     <path
+                       strokeLinecap="round"
+                       strokeLinejoin="round"
+                       strokeWidth="2"
+                       d="M17 8l4 4m0 0l-4 4m4-4H3"
+                     ></path>
+                   </svg>
+                 </a>
                 )}
               </div>
             </li>
