@@ -6,8 +6,8 @@ import { AppDispatch, RootState } from '@/app/store';
 import { fetchProducts } from './features/productSlice';
 import { Product } from './types';
 import Image from 'next/image';
-
-
+import ParallaxBackground from './components/ParallaxBackground';
+ 
 // YouTube embed component
 const VideoEmbed = ({ url }: { url: string }) => {
   const getVideoId = (link: string) => {
@@ -55,7 +55,7 @@ export default function ProductsPage() {
   // Initial load for first 3 items
   useEffect(() => {
     if (!initialLoadDone.current) {
-      loadProducts(1, 9);
+      loadProducts(1, 8);
       initialLoadDone.current = true;
     }
   }, [loadProducts]);
@@ -72,7 +72,7 @@ export default function ProductsPage() {
       // console.log( 'load tiep 3 san pham nè ')
       const nextPage = page + 1;
       setPage(nextPage);
-      loadProducts(nextPage, 3); // Load 3 more items
+      loadProducts(nextPage, 4); // Load 4 more items
     }
   }, [page, status, pagination, loadProducts]);
 
@@ -83,8 +83,9 @@ export default function ProductsPage() {
   }, [handleScroll]);
 
   return (
+   
     <div className="container mx-auto p-4 shadow-lg">
-      
+      <ParallaxBackground />
       <div className="relative h-[600px] mb-8">
           <Image
             src="/images/background.webp"
@@ -97,13 +98,17 @@ export default function ProductsPage() {
       </div>
 
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold mb-4">Sản phẩm ({pagination?.count || 0})</h1>
+        <div className='bg-pink-700 rounded-lg  border p-2  text-white '>
+          <strong className="text-2xl font-bold mb-4  uppercase">Tiện ích gia đình - Tiện Ích Không Ngờ ({pagination?.count || 0})</strong>
+        </div>
     
-        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 shadow-lg">
           {
           items.map((product: Product, index: number) => (
-            <li key={ index } className="border p-4 rounded-lg shadow-lg">
-              <h2 className="text-xl font-semibold mb-2">{product.title}</h2>
+            <li key={ index } className=" p-4 rounded-lg ">
+              <div className='p-2 bg-blue-700 text-white mb-2 rounded-md shadow-xl/30'>
+                <strong className="text-xl font-semibold mb-2 uppercase">{product.title}</strong>
+              </div>
               {/* <div 
                 className="text-gray-600 mb-4"
                 dangerouslySetInnerHTML={{ __html: product.description }}
@@ -159,10 +164,10 @@ export default function ProductsPage() {
                    href={product.voucherLink}
                    target="_blank"
                    rel="noopener noreferrer"
-                   className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white uppercase transition-all duration-300 transform bg-gradient-to-r from-amber-500 to-red-500 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl hover:shadow-amber-100 hover:bg-gradient-to-br group"
+                   className="relative inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white uppercase transition-all duration-300 transform bg-gradient-to-r from-green-500 to-blue-500 rounded-xl shadow-lg hover:scale-105 hover:shadow-xl hover:shadow-amber-100 hover:bg-gradient-to-br group"
                  >
                    {/* Animated border */}
-                   <span className="absolute inset-0 rounded-xl -z-10 bg-gradient-to-r from-amber-500 to-red-500 blur-sm group-hover:blur-md group-hover:opacity-75 transition-all duration-300"></span>
+                   <span className="absolute inset-0 rounded-xl -z-10 bg-gradient-to-r from-green-500 to-blue-500 blur-sm group-hover:blur-md group-hover:opacity-75 transition-all duration-300"></span>
                    
                    {/* Button content */}
                    <span className="relative tracking-wider">
@@ -207,6 +212,17 @@ export default function ProductsPage() {
           </div>
         )}
       </div>
+
+      <div className="relative h-[600px] mb-8 mt-8">
+        <Image
+          src="/images/footer.jpg"
+          alt="Tien ich khong ngo"
+          fill
+          className="object-cover"
+          quality={75}
+          priority
+        /> 
+       </div>
     </div>
   );
 }
